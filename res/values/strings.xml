@@ -2,5 +2,8 @@
 <resources>
 
     <string name="app_name">AndroidProfit</string>
+    <string name="image_description">image</string>
+    
+    <string name="alert_download">%s downloading</string>
 
 </resources>

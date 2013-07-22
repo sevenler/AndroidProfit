@@ -1,3 +1,4 @@
+
 package com.androidprofit;
 
 import android.os.Bundle;
@@ -40,8 +41,8 @@ public class TabFragment extends Fragment {
 		FrameLayout fl = new FrameLayout(getActivity());
 		fl.setLayoutParams(params);
 
-		final int margin = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 8, getResources()
-				.getDisplayMetrics());
+		final int margin = (int)TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 3,
+				getResources().getDisplayMetrics());
 
 		TextView v = new TextView(getActivity());
 		params.setMargins(margin, margin, margin, margin);
@@ -51,8 +52,9 @@ public class TabFragment extends Fragment {
 		v.setBackgroundResource(R.color.gray);
 		v.setText("CARD " + (position + 1));
 
-		fl.addView(v);
+		if (position == 0) {
+			DownloadTab.setMobileList(getActivity(), fl);
+		} else fl.addView(v);
 		return fl;
 	}
-
 }
