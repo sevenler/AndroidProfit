@@ -25,7 +25,7 @@ public class AccountTab extends Fragment  implements IFragment{
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		LayoutParams params = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
-		FrameLayout mFrameLayout = new FrameLayout(getActivity());
+		mFrameLayout = new FrameLayout(getActivity());
 		mFrameLayout.setLayoutParams(params);
 
 		AccountTab.setAccountList(getActivity(), mFrameLayout);

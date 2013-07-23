@@ -33,10 +33,7 @@ public class HomeActivity extends FragmentActivity {
 		adapter = new MyPagerAdapter(getSupportFragmentManager());
 		pager.setAdapter(adapter);
 
-		ViewGroup group = inflateTabBar(HomeActivity.this, R.layout.view_tab);
-		addTabsIntoActionBar(group);
-		
-		pager.setOnPageChangeListener(new OnPageChangeListener() {
+		ViewGroup group = inflateTabBar(HomeActivity.this, R.layout.view_tab, new OnPageChangeListener() {
 			@Override
 			public void onPageSelected(int arg0) {
 				//需要手动调用来刷新数据
@@ -52,26 +49,32 @@ public class HomeActivity extends FragmentActivity {
 			public void onPageScrollStateChanged(int arg0) {
 			}
 		});
-		
+		addTabsIntoActionBar(group);
 	}
 	
 	/**
 	 * 填充ActionBar中的tab
 	 * @param ctx
 	 * @param res
+	 * @param listener Viewpager的OnPageChangeListener事件
 	 * @return
 	 */
-	private ViewGroup inflateTabBar(Context ctx, int res){
+	private ViewGroup inflateTabBar(Context ctx, int res, OnPageChangeListener listener){
 		ViewGroup group = (ViewGroup)View.inflate(ctx, res, null);
 		PagerSlidingTabStrip tabs = (PagerSlidingTabStrip)group.findViewById(R.id.tabs);
 		tabs.setTextColorResource(R.color.black);
 		tabs.setIndicatorColorResource(R.color.dark_blue);
 		tabs.setViewPager(pager);
+		//在PagerSlidingTabStrip内部会重置Pager的PageChangeListenner
+		tabs.setOnPageChangeListener(listener);
 		
 		return group;
 	}
 
 	@TargetApi(Build.VERSION_CODES.HONEYCOMB)
+	/**
+	 * 设置actionbar中使用自定义控件
+	 */
 	private void addTabsIntoActionBar(View view) {
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
 			ActionBar ab = getActionBar();
@@ -80,7 +83,6 @@ public class HomeActivity extends FragmentActivity {
 			ab.setDisplayShowCustomEnabled(true);
 		}
 	}
-
 }
 
 class MyPagerAdapter extends FragmentPagerAdapter {
