@@ -9,7 +9,7 @@ public class AccountManager {
 	}
 
 	private AccountManager() {
-		this(new Account());
+		this(new Account("00001", "Johnny Hong", "johnnyxyzw@mail.com", 1000));
 	}
 
 	public Account getAccount() {

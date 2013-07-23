@@ -10,6 +10,13 @@ public class Account {
 	Account() {
 	}
 
+	Account(String id, String name, String mail, float money) {
+		this.id = id;
+		this.name = name;
+		this.mail = mail;
+		this.money = money;
+	}
+
 	public String getId() {
 		return id;
 	}

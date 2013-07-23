@@ -15,7 +15,6 @@
         android:targetSdkVersion="17" />
 
     <application
-        android:name="com.androidprofit.APApplication"
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:debuggable="true"
