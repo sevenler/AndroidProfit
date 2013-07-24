@@ -16,7 +16,6 @@ import android.content.IntentFilter;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -33,6 +32,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.androidprofit.AppAddedBoardcast.onAppListenner;
+import com.androidprofit.app.PackageInfo;
+import com.androidprofit.app.PackageManager;
 import com.androidprofit.user.Account;
 import com.androidprofit.user.AccountManager;
 
@@ -49,37 +50,27 @@ public class DownloadTab extends Fragment implements IFragment {
 		FrameLayout mFrameLayout = new FrameLayout(getActivity());
 		mFrameLayout.setLayoutParams(params);
 
-		DownloadTab.setMobileList(getActivity(), mFrameLayout);
+		setMobileList(getActivity(), mFrameLayout);
 
 		return mFrameLayout;
 	}
-
-	static final String[] MOBILE_OS = new String[] { "Android", "iOS", "WindowsMobile",
-			"Blackberry", "Android", "iOS", "WindowsMobile", "Blackberry", "Android", "iOS",
-			"WindowsMobile", "Blackberry", "Android", "iOS", "WindowsMobile", "Blackberry",
-			"Android", "iOS", "WindowsMobile", "Blackberry", "Android", "iOS", "WindowsMobile",
-			"Blackberry", "Android", "iOS", "WindowsMobile", "Blackberry", "Android", "iOS",
-			"WindowsMobile", "Blackberry", "Android", "iOS", "WindowsMobile", "Blackberry",
-			"Android", "iOS", "WindowsMobile", "Blackberry" };
-
-	static final String path = Environment.getExternalStorageDirectory() + File.separator
-			+ Environment.DIRECTORY_DOWNLOADS;
 
 	static final String MESSAGE_DOWNLOAD_FINISH = "Download apk %s finish";
 	static final String MESSAGE_APP_STARTED = "App %s started";
 	static final String MESSAGE_APP_RECORD = "App %s being recorded and cost %s";
 	static final String TAG_DOWNLOAD = "download";
 
-	public static ListView setMobileList(final Context ctx, ViewGroup root) {
+	public ListView setMobileList(final Context ctx, ViewGroup root) {
 		View.inflate(ctx, R.layout.view_download, root);
 		ListView list = (ListView)root.findViewById(R.id.list);
-		list.setAdapter(new MobileAdapter(ctx, MOBILE_OS));
+		
+		PackageInfo[] pkgs = PackageManager.instance().getmPackages();
+		list.setAdapter(new MobileAdapter(ctx, pkgs));
 		list.setOnItemClickListener(new OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
-				final String download = "http://s.androidesk.com/apk/Androidesk-release-androidesk.apk";
-				final String name = "androidesk.apk";
-				download(ctx, Uri.parse(download), path, name);
+				Intent intent = new Intent(getActivity(), AppDetailActivity.class);
+				ctx.startActivity(intent);
 			}
 		});
 		return list;
@@ -248,11 +239,11 @@ class AppAddedBoardcast extends BroadcastReceiver {
 	}
 }
 
-class MobileAdapter extends ArrayAdapter<String> {
+class MobileAdapter extends ArrayAdapter<PackageInfo> {
 	private final Context context;
-	private final String[] values;
+	private final PackageInfo[] values;
 
-	public MobileAdapter(Context context, String[] values) {
+	public MobileAdapter(Context context, PackageInfo[] values) {
 		super(context, R.layout.item_download, values);
 		this.context = context;
 		this.values = values;
@@ -266,19 +257,10 @@ class MobileAdapter extends ArrayAdapter<String> {
 		View rowView = inflater.inflate(R.layout.item_download, parent, false);
 		TextView textView = (TextView)rowView.findViewById(R.id.label);
 		ImageView imageView = (ImageView)rowView.findViewById(R.id.logo);
-		textView.setText(values[position]);
-
-		String s = values[position];
-
-		if (s.equals("WindowsMobile")) {
-			imageView.setImageResource(R.drawable.ic_launcher);
-		} else if (s.equals("iOS")) {
-			imageView.setImageResource(R.drawable.ic_launcher);
-		} else if (s.equals("Blackberry")) {
-			imageView.setImageResource(R.drawable.ic_launcher);
-		} else {
-			imageView.setImageResource(R.drawable.ic_launcher);
-		}
+		
+		PackageInfo pi = values[position];
+		if(pi != null) textView.setText(pi.getName());
+		imageView.setImageResource(R.drawable.ic_launcher);
 
 		return rowView;
 	}
