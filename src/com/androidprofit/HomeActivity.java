@@ -86,7 +86,7 @@ public class HomeActivity extends FragmentActivity {
 }
 
 class MyPagerAdapter extends FragmentPagerAdapter {
-	private final String[] TITLES = { "Categories", "Home"};
+	private final String[] TITLES = { "Categories", "Home", "Exchange"};
 	private final HashMap<Integer,Fragment> map = new LinkedHashMap<Integer,Fragment>();
 
 	public static final int POSITION_HOME = 0;
@@ -119,9 +119,9 @@ class MyPagerAdapter extends FragmentPagerAdapter {
 					fragment = new AccountTab();
 					break;
 				case POSITION_EXCHANGE:
+					fragment = new ExchangeTab();
 					break;
 				default:
-					fragment = new Fragment();
 					break;
 			}
 			

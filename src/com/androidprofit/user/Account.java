@@ -2,29 +2,37 @@
 package com.androidprofit.user;
 
 public class Account {
-	private String id;
+	private final String id;
+	private final Experience experience;
+	
 	private String name;
 	private String mail;
 	private float money = 0;
 
-	Account() {
+	Account(String id) {
+		this(id, null, null, 0);
 	}
 
 	Account(String id, String name, String mail, float money) {
+		this(id, name, mail, money, new Experience(id));
+	}
+
+	Account(String id, String name, String mail, float money, Experience experience) {
 		this.id = id;
 		this.name = name;
 		this.mail = mail;
 		this.money = money;
+		this.experience = experience;
 	}
 
 	public String getId() {
 		return id;
 	}
 
-	public void setId(String id) {
-		this.id = id;
+	public Experience getExperience() {
+		return experience;
 	}
-
+	
 	public String getName() {
 		return name;
 	}
@@ -47,5 +55,11 @@ public class Account {
 
 	public void setMoney(float money) {
 		this.money = money;
+	}
+	
+	@Override
+	public String toString() {
+		return "Account [id=" + id + ", experience=" + experience + ", name=" + name + ", mail="
+				+ mail + ", money=" + money + "]";
 	}
 }
