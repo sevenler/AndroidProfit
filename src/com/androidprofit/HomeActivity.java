@@ -86,12 +86,13 @@ public class HomeActivity extends FragmentActivity {
 }
 
 class MyPagerAdapter extends FragmentPagerAdapter {
-	private final String[] TITLES = { "Categories", "Home", "Exchange"};
+	private final String[] TITLES = { "Categories", "Home", "Exchange", "Feedback"};
 	private final HashMap<Integer,Fragment> map = new LinkedHashMap<Integer,Fragment>();
 
 	public static final int POSITION_HOME = 0;
 	public static final int POSITION_PERSONAL = 1;
 	public static final int POSITION_EXCHANGE = 2;
+	public static final int POSITION_FEEDBACK = 3;
 	
 	public MyPagerAdapter(FragmentManager fm) {
 		super(fm);
@@ -120,6 +121,9 @@ class MyPagerAdapter extends FragmentPagerAdapter {
 					break;
 				case POSITION_EXCHANGE:
 					fragment = new ExchangeTab();
+					break;
+				case POSITION_FEEDBACK:
+					fragment = new UmFeedbackTab();
 					break;
 				default:
 					break;
