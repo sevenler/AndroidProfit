@@ -1,6 +1,9 @@
 
 package com.androidprofit.app;
 
+import com.androidprofit.user.Account;
+import com.androidprofit.user.Experience;
+
 import android.content.Context;
 import android.util.Log;
 
@@ -32,7 +35,10 @@ public class PackageManager {
 		// 每次读取的时候过滤掉安装的应用
 		PackageInfo[] pkgs = mPackageInfo;
 		if (mContext != null) {
-			pkgs = ApkUtil.filterInstallPackages(mContext.getPackageManager(), pkgs);
+			Account account = com.androidprofit.user.AccountManager.instance().getAccount();
+			Experience exp = account.getExperience();
+			pkgs = ApkUtil.filterInstallAndUnExperiencePackages(mContext.getPackageManager(), exp,
+					pkgs);
 		} else {
 			Log.e("PackageManager", " PackageManager's context not initalized ",
 					new ExceptionInInitializerError());

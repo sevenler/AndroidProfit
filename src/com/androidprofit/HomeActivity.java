@@ -86,7 +86,7 @@ public class HomeActivity extends FragmentActivity {
 }
 
 class MyPagerAdapter extends FragmentPagerAdapter {
-	private final String[] TITLES = { "Categories", "Home", "Exchange", "Feedback"};
+	private final String[] TITLES = { "Task", "Home", "Exchange", "Feedback"};
 	private final HashMap<Integer,Fragment> map = new LinkedHashMap<Integer,Fragment>();
 
 	public static final int POSITION_HOME = 0;

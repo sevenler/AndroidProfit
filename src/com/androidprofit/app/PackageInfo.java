@@ -7,10 +7,11 @@ import android.os.Parcelable;
 import com.androidprofit.Util;
 
 public class PackageInfo implements Parcelable {
-	public static int INSTALLED = 0; // 表示已经安装，且跟现在这个apk文件是一个版本
-	public static int UNINSTALLED = 1; // 表示未安装
-	public static int INSTALLED_UPDATE = 2; // 表示已经安装，版本比现在这个版本要低，可以点击按钮更新
-	public static int UNKONWN = -1;// 未知
+	public static int UNKONWN = 1 << 0;// 未知
+	public static int INSTALLED = 1 << 1; // 表示已经安装，且跟现在这个apk文件是一个版本
+	public static int UNINSTALLED = 1 << 2; // 表示未安装
+	public static int INSTALLED_UPDATE = 1 << 3; // 表示已经安装，版本比现在这个版本要低，可以点击按钮更新
+	public static int EXPERIENCED = 1 << 4;//用户已经下载体验过,当用户通过AndroidProfit下载安装，并按时体验过后，就为此状态
 
 	private String pck;// 应用包名
 	private String name;// 应用名称
