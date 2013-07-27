@@ -7,16 +7,19 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.FrameLayout;
-import android.widget.TextView;
 import android.widget.FrameLayout.LayoutParams;
+import android.widget.ListView;
+import android.widget.TextView;
 
 import com.androidprofit.user.Account;
 import com.androidprofit.user.AccountManager;
+import com.androidprofit.user.Record;
 
-public class AccountTab extends Fragment  implements IFragment{
+public class AccountTab extends Fragment implements IFragment {
 	private FrameLayout mFrameLayout;
-	
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -28,27 +31,25 @@ public class AccountTab extends Fragment  implements IFragment{
 		mFrameLayout = new FrameLayout(getActivity());
 		mFrameLayout.setLayoutParams(params);
 
-		AccountTab.setAccountList(getActivity(), mFrameLayout);
-
+		View.inflate(getActivity(), R.layout.view_account, mFrameLayout);
+		
 		return mFrameLayout;
 	}
-	
+
+	@Override
+	public void onResume() {
+		super.onResume();
+		
+		setData(getActivity(), mFrameLayout);
+	}
+
 	@Override
 	public void onReflush() {
-		//控件初始化之前也可能调用
-		if(mFrameLayout != null) AccountTab.setData(mFrameLayout);
+		// 控件初始化之前也可能调用
+		if (mFrameLayout != null) AccountTab.setData(getActivity(), mFrameLayout);
 	}
 
-	public static ViewGroup setAccountList(final Context ctx, ViewGroup root) {
-		View.inflate(ctx, R.layout.view_account, root);
-		ViewGroup view = (ViewGroup)root.findViewById(R.id.account);
-
-		setData(view);
-
-		return view;
-	}
-
-	public static void setData(ViewGroup view) {
+	public static void setData(Context ctx, ViewGroup view) {
 		Account account = AccountManager.instance().getAccount();
 
 		TextView id = (TextView)view.findViewById(R.id.id);
@@ -59,7 +60,38 @@ public class AccountTab extends Fragment  implements IFragment{
 		email.setText(account.getMail());
 		TextView money = (TextView)view.findViewById(R.id.money);
 		money.setText(account.getMoney() + "");
+		ListView list = (ListView)view.findViewById(R.id.experience);
+		list.setAdapter(new ExperienceListAdapter(ctx, account.getExperience().getExperienceArray()));
 
 		System.out.println(String.format("account.getMoney():%s", account.getMoney()));
+	}
+}
+
+class ExperienceListAdapter extends ArrayAdapter<Record> {
+	private final Context context;
+	private final Record[] values;
+
+	public ExperienceListAdapter(Context context, Record[] values) {
+		super(context, R.layout.item_experience, values);
+		this.context = context;
+		this.values = values;
+	}
+
+	@Override
+	public View getView(int position, View convertView, ViewGroup parent) {
+		LayoutInflater inflater = (LayoutInflater)context
+				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
+		View rowView = inflater.inflate(R.layout.item_experience, parent, false);
+		TextView name = (TextView)rowView.findViewById(R.id.name);
+		TextView time = (TextView)rowView.findViewById(R.id.time);
+		TextView getted = (TextView)rowView.findViewById(R.id.getted);
+
+		Record record = values[position];
+		name.setText(record.getName());
+		time.setText(record.getTime() + "");
+		getted.setText(record.getCost() + "");
+
+		return rowView;
 	}
 }

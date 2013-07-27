@@ -1,10 +1,12 @@
 
 package com.androidprofit.user;
 
+import android.util.Log;
+
 public class Account {
 	private final String id;
 	private final Experience experience;
-	
+
 	private String name;
 	private String mail;
 	private float money = 0;
@@ -32,7 +34,7 @@ public class Account {
 	public Experience getExperience() {
 		return experience;
 	}
-	
+
 	public String getName() {
 		return name;
 	}
@@ -50,13 +52,15 @@ public class Account {
 	}
 
 	public float getMoney() {
+		Log.i("Account", String.format("account getMoney (%s)", this.money));
 		return money;
 	}
 
 	public void setMoney(float money) {
+		Log.i("Account", String.format("account setMoney (%s,%s)", this.money, money));
 		this.money = money;
 	}
-	
+
 	@Override
 	public String toString() {
 		return "Account [id=" + id + ", experience=" + experience + ", name=" + name + ", mail="

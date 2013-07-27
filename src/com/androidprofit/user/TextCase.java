@@ -13,8 +13,8 @@ public class TextCase extends AndroidTestCase {
 		Account account = AccountManager.instance().getAccount();
 
 		Experience experience = account.getExperience();
-		experience.addExperience(new Record("com.androidesk", date, 20));
-		experience.addExperience(new Record("com.androidesk.live", date, 10));
+		experience.addExperience(new Record("com.androidesk", "安卓壁纸",  date, 20));
+		experience.addExperience(new Record("com.androidesk.live","安卓动态壁纸", date, 10));
 		experience.addExchange(new Exchange(date, 0, 20));
 		experience.addExchange(new Exchange(date, 0, 10));
 

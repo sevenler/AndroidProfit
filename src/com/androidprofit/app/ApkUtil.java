@@ -1,6 +1,7 @@
 
 package com.androidprofit.app;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -21,7 +22,8 @@ public class ApkUtil {
 
 	/**
 	 * 判断apks列表是否安装
-	 * @param pm
+	 * 
+	 * @param pm 使用Context.getPackageManager()得到
 	 * @param apks
 	 */
 	public static void checkInstallType(android.content.pm.PackageManager pm, PackageInfo[] apks) {
@@ -33,7 +35,28 @@ public class ApkUtil {
 	}
 
 	/**
+	 * 过滤已经安装的应用包
+	 * @param pm 使用Context.getPackageManager()得到
+	 * @param apks 
+	 * @return
+	 */
+	public static PackageInfo[] filterInstallPackages(android.content.pm.PackageManager pm,
+			PackageInfo[] apks) {
+		checkInstallType(pm, apks);
+
+		ArrayList<PackageInfo> result = new ArrayList<PackageInfo>();
+		for (PackageInfo pkg : apks) {
+			if(pkg.getType() == PackageInfo.UNINSTALLED){
+				result.add(pkg);
+			}
+		}
+		PackageInfo[] notInstalledPkgs = result.toArray(new PackageInfo[result.size()]);
+		return notInstalledPkgs;
+	}
+
+	/**
 	 * 检查包的安装状态
+	 * 
 	 * @param map HashMap<Packagename，VersionCode>
 	 * @param pkg 包信息
 	 * @return
@@ -55,6 +78,7 @@ public class ApkUtil {
 
 	/**
 	 * 获取所有的安装的包
+	 * 
 	 * @param pm 使用Context.getPackageManager()得到
 	 * @return HashMap<Packagename，VersionCode>
 	 */

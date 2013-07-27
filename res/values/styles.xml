@@ -4,4 +4,8 @@
 
     <style name="AppTheme" parent="AppBaseTheme"></style>
 
+    <style name="textFont">
+        <item name="android:textSize">30sp</item>
+    </style>
+
 </resources>
