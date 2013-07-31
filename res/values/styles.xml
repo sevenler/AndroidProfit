@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
 
     <style name="AppBaseTheme" parent="android:Theme.Light"></style>
 
@@ -6,6 +6,7 @@
 
     <style name="textFont">
         <item name="android:textSize">30sp</item>
+        <item name="android:gravity">center</item>
     </style>
 
 </resources>

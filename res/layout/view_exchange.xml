@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/account"
+    android:layout_width="fill_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <Button
+        android:id="@+id/exchange_alipay"
+        style="@style/textFont"
+        android:layout_width="fill_parent"
+        android:layout_height="50dip"
+        android:layout_margin="3dp"
+        android:background="#e2e2e2"
+        android:text="@string/exchange_alipay" />
+
+    <Button
+        android:id="@+id/exchange_mobile"
+        style="@style/textFont"
+        android:layout_width="fill_parent"
+        android:layout_height="50dip"
+        android:layout_margin="3dp"
+        android:background="#e2e2e2"
+        android:text="@string/exchange_mobile" />
+
+    <Button
+        android:id="@+id/exchange_tencent"
+        style="@style/textFont"
+        android:layout_width="fill_parent"
+        android:layout_height="50dip"
+        android:layout_margin="3dp"
+        android:background="#e2e2e2"
+        android:text="@string/exchange_tencent" />
+
+</LinearLayout>

@@ -3,7 +3,27 @@
 
     <string name="app_name">AndroidProfit</string>
     <string name="image_description">image</string>
-    
     <string name="alert_download">%s downloading</string>
+
+    <!-- exchange -->
+    <string name="exchange_alipay">Alipay exchange</string>
+    <string name="exchange_mobile">Mobile exchange</string>
+    <string name="exchange_tencent">QQ exchange</string>
+    <string name="title_exchange_surplus">Surplus</string>
+    <string name="title_exchange_type">Type</string>
+    <string name="title_exchange">exchange</string>
+    <string name="exchange_submit">Submit</string>
+
+    <string-array name="exchange_type_choices">
+        <item>Alipay</item>
+        <item>Mobile</item>
+        <item>Tencent</item>
+    </string-array>
+
+    <integer-array name="exchange_type_values" translatable="false">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+    </integer-array>
 
 </resources>

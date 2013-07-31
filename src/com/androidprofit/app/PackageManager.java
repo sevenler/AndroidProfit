@@ -97,6 +97,7 @@ public class PackageManager {
 						"http://img.wdjimg.com/mms/icon/v1/a/5f/2fc8afed32938550693c79136f5b15fa_256_256.png",
 						"UC浏览器是一款全球领先的智能手机浏览器，拥有独创的U3内核和云端技术，完美以支持HTML5应用，具有智能、极速、安全，易扩展等特性，让您在阅资讯、读小说、看视频、上微博、玩游戏、网上购物等都能享受最流畅的移动互联网体验。",
 						10, 10 * 1000) };
+		
 		return pkgs;
 	}
 
