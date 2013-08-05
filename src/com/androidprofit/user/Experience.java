@@ -30,6 +30,7 @@ public class Experience {
 	}
 
 	public void addExchange(Exchange exchange) {
+		Log.i("Experience", String.format(" Add exchange %s ", exchange));
 		this.exchange.add(exchange);
 	}
 
