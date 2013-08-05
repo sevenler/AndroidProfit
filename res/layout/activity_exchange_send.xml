@@ -61,14 +61,11 @@
             android:text="@string/title_exchange" />
 
         <EditText
-            android:id="@+id/editText1"
-            android:layout_width="match_parent"
-            android:layout_height="50dip"
-            android:layout_weight="1"
-            android:ems="10" >
-
-            <requestFocus />
-        </EditText>
+            android:id="@+id/exchange"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:inputType="numberDecimal" />
     </LinearLayout>
 
     <LinearLayout
