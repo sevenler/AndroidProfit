@@ -9,7 +9,6 @@ import android.content.Context;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
@@ -17,9 +16,15 @@ import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.view.View;
 import android.view.ViewGroup;
 
+import android.widget.Toast;
 import com.astuetz.viewpager.extensions.PagerSlidingTabStrip;
+import com.umeng.analytics.MobclickAgent;
+import com.umeng.fb.FeedbackAgent;
+import com.umeng.update.UmengUpdateAgent;
+import com.umeng.update.UmengUpdateListener;
+import com.umeng.update.UpdateResponse;
 
-public class HomeActivity extends FragmentActivity {
+public class HomeActivity extends BaseActivity {
 
 	private ViewPager pager;
 	private MyPagerAdapter adapter;
@@ -50,7 +55,44 @@ public class HomeActivity extends FragmentActivity {
 			}
 		});
 		addTabsIntoActionBar(group);
+
+       umengAgentInit();
 	}
+
+    /**
+     * 初始化U友蒙的统计和升级提示
+     */
+    private void umengAgentInit(){
+        MobclickAgent.onError(this);
+        MobclickAgent.updateOnlineConfig(this);
+        MobclickAgent.setDebugMode(true);
+
+        FeedbackAgent agent = new FeedbackAgent(this);
+        agent.sync();
+
+        UmengUpdateAgent.update(this);
+        UmengUpdateAgent.setUpdateAutoPopup(false);
+        UmengUpdateAgent.setUpdateListener(new UmengUpdateListener() {
+            @Override
+            public void onUpdateReturned(int updateStatus,UpdateResponse updateInfo) {
+                Context ctx = HomeActivity.this;
+                switch (updateStatus) {
+                    case 0: // has update
+                        Toast.makeText(ctx, updateInfo.updateLog, Toast.LENGTH_SHORT).show();
+                        break;
+                    case 1: // has no update
+                        Toast.makeText(ctx, "没有更新", Toast.LENGTH_SHORT).show();
+                        break;
+                    case 2: // none wifi
+                        Toast.makeText(ctx, "没有wifi连接， 只在wifi下更新", Toast.LENGTH_SHORT).show();
+                        break;
+                    case 3: // time out
+                        Toast.makeText(ctx, "超时", Toast.LENGTH_SHORT).show();
+                        break;
+                }
+            }
+        });
+    }
 	
 	/**
 	 * 填充ActionBar中的tab

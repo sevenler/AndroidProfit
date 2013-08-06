@@ -3,6 +3,7 @@ package com.androidprofit;
 
 import java.io.File;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 import android.annotation.TargetApi;
@@ -22,14 +23,9 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
+import android.widget.*;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.ArrayAdapter;
-import android.widget.FrameLayout;
 import android.widget.FrameLayout.LayoutParams;
-import android.widget.ListView;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.android.volley.toolbox.NetworkImageView;
 import com.androidprofit.AppAddedBoardcast.onAppListenner;
@@ -39,6 +35,7 @@ import com.androidprofit.image.ImageCacheManager;
 import com.androidprofit.user.Account;
 import com.androidprofit.user.AccountManager;
 import com.androidprofit.user.Record;
+import com.umeng.analytics.MobclickAgent;
 
 public class DownloadTab extends Fragment implements IFragment {
 	private ListView mList;
@@ -66,6 +63,8 @@ public class DownloadTab extends Fragment implements IFragment {
 	static final String MESSAGE_APP_RECORD = "App %s being recorded and cost %s";
 	static final String TAG_DOWNLOAD = "download";
 
+    private static final String EVENT_DOWNLOAD_APP = "Download_App";
+
 	public void inflateData(final Context ctx, ListView list) {
 		final PackageInfo[] pkgs = PackageManager.instance().getPackages();
 		list.setAdapter(new DownloadAppListAdapter(ctx, pkgs));
@@ -79,12 +78,36 @@ public class DownloadTab extends Fragment implements IFragment {
 		});
 	}
 
+    /**
+     * 统计下载事件
+     * @param ctx 上下文
+     * @param pkg  包信息
+     * @param event  事件类型 0:download 1:installed
+     */
+    private static void accountDownload(Context ctx, PackageInfo pkg, int event){
+        String type = "";
+        switch(event){
+            case 0:
+                type = "download";
+                break;
+            case 1:
+                type = "installed";
+                break;
+        }
+        HashMap<String,String> map = new HashMap<String,String>();
+        map.put(pkg.getName(), type);
+        MobclickAgent.onEvent(ctx, EVENT_DOWNLOAD_APP, map);
+    }
+
 	@TargetApi(Build.VERSION_CODES.GINGERBREAD)
 	/**
 	 * 下载app
 	 */
 	public static void downloadAndInstallApk(final Context ctx, String downloadPath,
 			final PackageInfo pkg) {
+
+        accountDownload(ctx, pkg, 0);
+
 		DownloadManager.Request request = new Request(Uri.parse(pkg.getUrl()));
 		request.setAllowedNetworkTypes(Request.NETWORK_WIFI);
 		request.setTitle(String.format(ctx.getString(R.string.alert_download), pkg.getName()));
@@ -145,7 +168,10 @@ public class DownloadTab extends Fragment implements IFragment {
 				: "not experience";
 		Toast.makeText(ctx, message, Toast.LENGTH_SHORT).show();
 
-		if (run) accountExperienceRecord(pkg);
+		if (run) {
+            accountDownload(ctx, pkg, 1);
+            accountExperienceRecord(pkg);
+        }
 	}
 
 	/**

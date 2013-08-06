@@ -80,6 +80,7 @@ public class UmFeedbackTab extends Fragment implements IFragment {
 
 			});
 			agent = new FeedbackAgent(ctx);
+            agent.sync();
 			defaultConversation = agent.getDefaultConversation();
 
 			replyListView = (ListView)root.findViewById(R.id.umeng_fb_reply_list);
