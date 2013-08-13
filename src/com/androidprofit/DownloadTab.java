@@ -3,7 +3,6 @@ package com.androidprofit;
 
 import java.io.File;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 
 import android.annotation.TargetApi;
@@ -23,9 +22,14 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.*;
+import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.ArrayAdapter;
+import android.widget.FrameLayout;
 import android.widget.FrameLayout.LayoutParams;
+import android.widget.ListView;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.toolbox.NetworkImageView;
 import com.androidprofit.AppAddedBoardcast.onAppListenner;
@@ -34,8 +38,8 @@ import com.androidprofit.app.PackageManager;
 import com.androidprofit.image.ImageCacheManager;
 import com.androidprofit.user.Account;
 import com.androidprofit.user.AccountManager;
+import com.androidprofit.user.Analyzer;
 import com.androidprofit.user.Record;
-import com.umeng.analytics.MobclickAgent;
 
 public class DownloadTab extends Fragment implements IFragment {
 	private ListView mList;
@@ -63,8 +67,6 @@ public class DownloadTab extends Fragment implements IFragment {
 	static final String MESSAGE_APP_RECORD = "App %s being recorded and cost %s";
 	static final String TAG_DOWNLOAD = "download";
 
-    private static final String EVENT_DOWNLOAD_APP = "Download_App";
-
 	public void inflateData(final Context ctx, ListView list) {
 		final PackageInfo[] pkgs = PackageManager.instance().getPackages();
 		list.setAdapter(new DownloadAppListAdapter(ctx, pkgs));
@@ -78,27 +80,6 @@ public class DownloadTab extends Fragment implements IFragment {
 		});
 	}
 
-    /**
-     * 统计下载事件
-     * @param ctx 上下文
-     * @param pkg  包信息
-     * @param event  事件类型 0:download 1:installed
-     */
-    private static void accountDownload(Context ctx, PackageInfo pkg, int event){
-        String type = "";
-        switch(event){
-            case 0:
-                type = "download";
-                break;
-            case 1:
-                type = "installed";
-                break;
-        }
-        HashMap<String,String> map = new HashMap<String,String>();
-        map.put(pkg.getName(), type);
-        MobclickAgent.onEvent(ctx, EVENT_DOWNLOAD_APP, map);
-    }
-
 	@TargetApi(Build.VERSION_CODES.GINGERBREAD)
 	/**
 	 * 下载app
@@ -106,7 +87,7 @@ public class DownloadTab extends Fragment implements IFragment {
 	public static void downloadAndInstallApk(final Context ctx, String downloadPath,
 			final PackageInfo pkg) {
 
-        accountDownload(ctx, pkg, 0);
+        Analyzer.analysePackage(ctx, pkg, Analyzer.EVENT_TYPE_DOWNLOAD);
 
 		DownloadManager.Request request = new Request(Uri.parse(pkg.getUrl()));
 		request.setAllowedNetworkTypes(Request.NETWORK_WIFI);
@@ -143,6 +124,8 @@ public class DownloadTab extends Fragment implements IFragment {
 		AppAddedBoardcast.registerAndAutoUnRegister(ctx, new onAppListenner() {
 			@Override
 			public void onComplated(String app) {
+                String message = String.format("experience the app in %s seconed", pkg.getExperienceTime());
+                Util.MyToast(ctx, message, Toast.LENGTH_SHORT).show();
 				Log.i(TAG_DOWNLOAD, String.format(MESSAGE_APP_STARTED, app));
 
 				checkExperience(ctx, pkg);
@@ -154,7 +137,7 @@ public class DownloadTab extends Fragment implements IFragment {
 	 * 检测用户的体验是否满足要求
 	 * 
 	 * @param ctx
-	 * @param app
+	 * @param pkg
 	 */
 	private static void checkExperience(Context ctx, PackageInfo pkg) {
 		try {
@@ -166,10 +149,10 @@ public class DownloadTab extends Fragment implements IFragment {
 		boolean run = checkAppRuning(ctx, pkg.getPck());
 		String message = run ? String.format("app %s is experience right", pkg.getPck())
 				: "not experience";
-		Toast.makeText(ctx, message, Toast.LENGTH_SHORT).show();
+        Util.MyToast(ctx, message, Toast.LENGTH_SHORT).show();
 
 		if (run) {
-            accountDownload(ctx, pkg, 1);
+            Analyzer.analysePackage(ctx, pkg, Analyzer.EVENT_TYPE_INSTALLED);
             accountExperienceRecord(pkg);
         }
 	}
@@ -177,7 +160,7 @@ public class DownloadTab extends Fragment implements IFragment {
 	/**
 	 * 记录用户使用情况
 	 * 
-	 * @param app 使用的app的包名
+	 * @param pkg 使用的app的包名
 	 */
 	private static void accountExperienceRecord(PackageInfo pkg) {
 		// TODO 查询app的使用分值

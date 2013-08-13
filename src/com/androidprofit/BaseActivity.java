@@ -1,7 +1,7 @@
 package com.androidprofit;
 
-import android.app.Activity;
 import android.support.v4.app.FragmentActivity;
+
 import com.umeng.analytics.MobclickAgent;
 
 /**
