@@ -128,4 +128,13 @@ public class TextCase extends AndroidTestCase {
 		}
 		System.out.println(String.format("====================================="));
 	}
+	
+	public void testMothed2() {
+		PackageManager pm = PackageManager.instance();
+		PackageInfo[] pis = pm.loadDefaultPackages();
+		
+		Gson gson = new Gson();
+		String string = gson.toJson(pis);
+		System.out.println(String.format("%s", string));
+	}
 }

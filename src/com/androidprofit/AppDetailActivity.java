@@ -1,11 +1,8 @@
 
 package com.androidprofit;
 
-import java.io.File;
-
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Environment;
 import android.os.Parcelable;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
@@ -15,6 +12,7 @@ import android.widget.TextView;
 
 import com.android.volley.toolbox.NetworkImageView;
 import com.androidprofit.app.PackageInfo;
+import com.androidprofit.app.PackageManager;
 import com.androidprofit.image.ImageCacheManager;
 
 public class AppDetailActivity extends FragmentActivity {
@@ -42,9 +40,6 @@ public class AppDetailActivity extends FragmentActivity {
 		loadData();
 	}
 
-	static final String path = Environment.getExternalStorageDirectory() + File.separator
-			+ Environment.DIRECTORY_DOWNLOADS;
-
 	private void loadData() {
 		NetworkImageView image = (NetworkImageView)findViewById(R.id.logo);
 		TextView name = (TextView)findViewById(R.id.name);
@@ -53,7 +48,8 @@ public class AppDetailActivity extends FragmentActivity {
 		findViewById(R.id.download).setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				DownloadTab.downloadAndInstallApk(AppDetailActivity.this, path, pkg);
+				PackageManager pm = PackageManager.instance();
+				pm.downloadAndInstallApk(AppDetailActivity.this, pkg);
 			}
 		});
 
