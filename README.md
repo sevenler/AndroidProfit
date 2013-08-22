@@ -1,4 +1,5 @@
 AndroidProfit
 =============
 
-安卓赚钱
+项目引用
+   https://github.com/astuetz/PagerSlidingTabStrip.git
